@@ -1,4 +1,4 @@
-const canvas = document.getElementById("jogo")
+const canvas = document.getElementById("jogo") //danyel
 const contexto = canvas.getContext("2d")
 const placar = document.getElementById("placar")
 
