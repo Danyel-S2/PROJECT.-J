@@ -18,7 +18,7 @@ const quadra = new Image();
 // FUNÇÃO PARA DESENHAR O JOGO
 
 const desenhar = (contexto, estado) => {
-  contexto.clearRect(0, 0, canvas.width, canvas.height);
+  contexto.clearRect(0, 0, canvas.width, canvas.height)
 
   // -------------Quadra de basquete---------------
   quadra.onload = () => {
@@ -27,28 +27,28 @@ const desenhar = (contexto, estado) => {
 
   // -------------Cesta de Basquete---------------
   contexto.fillStyle = "blue";
-  contexto.fillRect(estado.cesta.x, estado.cesta.y, estado.cesta.largura, estado.cesta.altura);
+  contexto.fillRect(estado.cesta.x, estado.cesta.y, estado.cesta.largura, estado.cesta.altura)
 
-  contexto.lineWidth = 3;
-  contexto.strokeStyle = "red";
-  contexto.strokeRect(201, 51, 100, 10);
+  contexto.lineWidth = 3
+  contexto.strokeStyle = "red"
+  contexto.strokeRect(201, 51, 100, 10)
 
   // -------------Bola de basquete---------------
-  contexto.beginPath();
-  contexto.fillStyle = "red";
-  contexto.arc(estado.bola.x, estado.bola.y, estado.bola.raio, 0, Math.PI * 2);
-  contexto.fill();
+  contexto.beginPath()
+  contexto.fillStyle = "red"
+  contexto.arc(estado.bola.x, estado.bola.y, estado.bola.raio, 0, Math.PI * 2)
+  contexto.fill()
 
   // Placar
-  placar.textContent = "Pontos: " + estado.pontos;
+  placar.textContent = "Pontos: " + estado.pontos
 }
 
 // Função pura: atualiza o estado da bola
 const atualizar = (estado) => {
   if (!estado.bola.lancada) return estado;
 
-  let novaY = estado.bola.y + estado.bola.velocidade;
-  let novaVy = estado.bola.velocidade + 0.5; // gravidade
+  let novaY = estado.bola.y + estado.bola.velocidade
+  let novaVy = estado.bola.velocidade + 0.5 // gravidade
 
   // verificar se  a bola passou pela cesta
   const dentroCesta =
@@ -62,7 +62,7 @@ const atualizar = (estado) => {
       ...estado,
       bola: { ...estado.bola, y: 460, velocidade: 0, lancada: false },
       pontos: estado.pontos + 1
-    };
+    }
   }
 
   // A bola voltou pro chão
@@ -70,37 +70,42 @@ const atualizar = (estado) => {
     return {
       ...estado,
       bola: { ...estado.bola, y: 460, velocidade: 0, lancada: false }
-    };
+    }
   }
 
   return {
     ...estado,
     bola: { ...estado.bola, y: novaY, velocidade: novaVy, lancada: true }
-  };
-};
+  }
+}
 
 // Função pura: Deve lançar a bola
+// se a bola ainda não foi lançada (lancada === false), ela retorna um novo objeto de estado onde a bola ganha velocidade -20 ('pra cima') no canvas, e lancada passa a ser true
+//if(!estado.bola.lancada): o '!' nega o booleano. Então , entra aqui somente se a bola ainda não foi lançada.
+//return { ...estado... } o spred( ...estado) cria um novo objeto de topo copiando as chaves de estado.
+//bola: { ...estado.bola, velocidade: -20, lancada: true}: crua um novo objeto bola, copiando o antigo ( ...estado.bola) e sobrescrevendo a velocidade para -20 e lancada pra true. 
+//return estado: se a bola ja estava lançada, nada muda, a função retorna o mesmo objeto recebido.  
 const lancar = (estado) => {
   if (!estado.bola.lancada) {
     return {
       ...estado,
       bola: { ...estado.bola, velocidade: -20, lancada: true }
-    };
+    }
   }
   return estado;
-};
+}
 
-let estado = estadoInicial;
+let estado = estadoInicial
 
 // Loop do jogo
 const loop = () => {
-  estado = atualizar(estado);
-  desenhar(contexto, estado);
-  requestAnimationFrame(loop);
-};
-loop();
+  estado = atualizar(estado)
+  desenhar(contexto, estado)
+  requestAnimationFrame(loop)
+}
+loop()
 
 // clique → lança a bola
 canvas.addEventListener("click", () => {
-  estado = lancar(estado);
-});
+  estado = lancar(estado)
+})
